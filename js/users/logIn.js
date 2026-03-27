@@ -22,11 +22,11 @@ formLogIn.addEventListener('submit',(e)=>{
 async function logIn(userName, password){
     try {
         const response = await fetch('./../Ticket/api/users/login.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userName, password })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userName, password })
         });
 
         if (!response.ok) {
