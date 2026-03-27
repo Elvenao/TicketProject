@@ -6,6 +6,6 @@
     <title>Error</title>
 </head>
 <body>
-    
+    Error 404
 </body>
 </html>

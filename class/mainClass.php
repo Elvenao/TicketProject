@@ -46,13 +46,13 @@
                 $pcmd->execute();
 
                 while ($row = $pcmd->fetch(PDO::FETCH_ASSOC)) {
-                    $res[] = $row; // Cada fila es un arreglo asociativo
+                    $cursor[] = $row; // Cada fila es un arreglo asociativo
                 }
 
                 $pcmd = null; // Cierra el statement/command
                 $cnx = null; // Cierra la conexión
 
-                return $res;
+                return $cursor;
             } catch (PDOException $ex) {
                 error_log("Error al ejecutar la consulta: " . $ex->getMessage());
                 return null;

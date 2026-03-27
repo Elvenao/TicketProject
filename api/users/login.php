@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require_once __DIR__ . "/../../model/mainModel.php";
     header('Content-Type: application/json');
 
@@ -6,19 +7,45 @@
 
     $user = $data['userName'] ?? '';
     $pass = $data['password'] ?? '';
-    $model = new mainModel();
-    $res = $model->getData("usuarios",['username','password'], 'username = ?;',[$user]);
-    $hash = $res[0]['password'];
 
-    if($res && $res[0]['username'] == $user && password_verify($pass,$hash)){
-        echo json_encode([
-            "status" => "ok",
-            "message" => "Login correcto"
-        ]);
-    } else {
+    
+    if($user == '' || $pass == ''){
         echo json_encode([
             "status" => "error",
-            "message" => "Credenciales incorrectas: ". $res[0]['username'] . " y " . $res[0]['password'],
-           
+            "message" => "Values are empty",
+            "code" => 2
+        ]);
+        exit;
+    }
+    
+    $model = new mainModel();
+    $res = $model->getData("usuarios",['username','password'], 'username = ?;',[$user]);
+    if(!isset($res)){
+        echo json_encode([
+            "status" => "error",
+            "message" => "Wrong Credentials: ",
+            "code" => 1,
+            "array" => $res
+        ]);
+    }
+    
+    
+    $hash = $res[0]['password'];
+
+    if(password_verify($pass,$hash)){
+        echo json_encode([
+            "status" => "ok",
+            "message" => "Welcome",
+            "code" => 0
+        ]);
+        $_SESSION["user"] = $user;
+        $_SESSION["login"] = true;
+        session_regenerate_id(true);
+    }else{
+        echo json_encode([
+            "status" => "error",
+            "message" => "Wrong Credentials: ",
+            "code" => 1,
+            "array" => $res
         ]);
     }
